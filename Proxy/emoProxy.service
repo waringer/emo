@@ -1,0 +1,12 @@
+    [Unit]
+    Description=emoProxy
+    After=network.target
+
+    [Service]
+    ExecStart=/usr/local/bin/emoProxy
+    Type=simple
+    WatchdogSec=0s
+    Restart=on-failure
+
+    [Install]
+    WantedBy=multi-user.target
