@@ -4,7 +4,7 @@
 Emo send this request to authenticate against the server.  
 The Mac is all lower case and without any delimiter and 12 characters long.  
 
-The Response is a Json with 3 Fields:
+The Response is a JSON with 3 Fields:
 - access_token  
     Common JSON Web Token (JWT) where sub is *\<emos mac>*
 - expire_in  
@@ -14,6 +14,7 @@ The Response is a Json with 3 Fields:
 
 ### Sample Request:
 **URL:** GET /token/aabbccddeeff HTTP/1.0  
+
 **Headers:**  
 
 ### Sample Response:

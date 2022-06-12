@@ -19,9 +19,10 @@ type emo_time struct {
 }
 
 const (
-	livingai_server = "3.66.68.197" // api.living.ai => 3.66.68.197
-	postFS          = "/tmp/"
-	logFileName     = "/var/log/emoProxy.log"
+	livingio_api_server = "3.66.68.197"   // api.living.ai => 3.66.68.197
+	livingio_tts_server = "tts.living.ai" // tts.living.ai => 3.224.137.253
+	postFS              = "/tmp/"
+	logFileName         = "/var/log/emoProxy.log"
 )
 
 func main() {
@@ -59,7 +60,7 @@ func main() {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusCreated)
 
-		body := makeRequest(r)
+		body := makeApiRequest(r)
 		fmt.Fprint(w, body)
 	})
 
@@ -70,13 +71,19 @@ func main() {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusCreated)
 
-		body := makeRequest(r)
+		body := makeApiRequest(r)
 		fmt.Fprint(w, body)
 	})
 
 	// handle downloads
 	http.HandleFunc("/download/", func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
+
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.WriteHeader(http.StatusCreated)
+
+		body := makeTtsRequest(r)
+		fmt.Fprint(w, body)
 	})
 
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(*Port), nil))
@@ -90,11 +97,11 @@ func logRequest(r *http.Request) {
 	}
 }
 
-func makeRequest(r *http.Request) string {
+func makeApiRequest(r *http.Request) string {
 	var request *http.Request
 	switch r.Method {
 	case "GET":
-		request, _ = http.NewRequest("GET", "https://"+livingai_server+r.URL.RequestURI(), nil)
+		request, _ = http.NewRequest("GET", "https://"+livingio_api_server+r.URL.RequestURI(), nil)
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
 
@@ -108,7 +115,7 @@ func makeRequest(r *http.Request) string {
 			ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
 		}
 
-		request, _ = http.NewRequest("POST", "https://"+livingai_server+r.URL.RequestURI(), bytes.NewBuffer(body))
+		request, _ = http.NewRequest("POST", "https://"+livingio_api_server+r.URL.RequestURI(), bytes.NewBuffer(body))
 
 		request.Header.Add("Content-Type", r.Header.Get("Content-Type"))
 		request.Header.Add("Content-Length", r.Header.Get("Content-Length"))
@@ -138,6 +145,49 @@ func makeRequest(r *http.Request) string {
 	// read response
 	body, _ := ioutil.ReadAll(response.Body)
 	log.Println("Server response: ", string(body))
+
+	return string(body)
+}
+
+func makeTtsRequest(r *http.Request) string {
+	request, _ := http.NewRequest("GET", "http://"+livingio_tts_server+r.URL.RequestURI(), nil)
+
+	val, exists := r.Header["Authorization"]
+	if exists {
+		request.Header.Add("Authorization", val[0])
+	}
+
+	val, exists = r.Header["Secret"]
+	if exists {
+		request.Header.Add("Secret", val[0])
+	}
+
+	request.Header.Del("User-Agent")
+
+	httpclient := &http.Client{}
+	response, err := httpclient.Do(request)
+
+	if err != nil {
+		log.Fatalf("An Error Occured %v", err)
+	}
+	defer response.Body.Close()
+
+	// read response
+	body, _ := ioutil.ReadAll(response.Body)
+
+	// write post request body to fs
+	switch response.Header.Get("Content-Type") {
+	case "application/json":
+		ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
+	case "application/octet-stream":
+		ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
+	default:
+		ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
+	}
+
+	for k, v := range response.Header {
+		log.Printf("Response Header field %q, Value %q\n", k, v)
+	}
 
 	return string(body)
 }

@@ -15,7 +15,7 @@ Server-URL: api.living.ai
     - emo sends a Secret and Authorization as headers with every request
 
 ## Requests from Emo:
-All requests from emo to this server are made over https, but without any checks of the certificate. With every request emo sends the folling http headers:
+All requests from emo to this server are made over https, but without any checks of the certificate. With every request emo sends the following http header:
 - *Secret*  
     Contains a string that change every second. the string is 22 characters long and can contains the characters a-z, A-Z, 0-9, -_  
     *Perhaps it is a Base64url encoded Md5 hash of something*
