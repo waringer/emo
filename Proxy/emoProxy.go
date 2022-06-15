@@ -108,11 +108,11 @@ func makeApiRequest(r *http.Request) string {
 		// write post request body to fs
 		switch r.Header.Get("Content-Type") {
 		case "application/json":
-			ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
+			ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
 		case "application/octet-stream":
-			ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".pcm", body, 0644)
+			ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".pcm", body, 0644)
 		default:
-			ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
+			ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
 		}
 
 		request, _ = http.NewRequest("POST", "https://"+livingio_api_server+r.URL.RequestURI(), bytes.NewBuffer(body))
@@ -178,11 +178,11 @@ func makeTtsRequest(r *http.Request) string {
 	// write post request body to fs
 	switch response.Header.Get("Content-Type") {
 	case "application/json":
-		ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
+		ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
 	case "application/octet-stream":
-		ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
+		ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
 	default:
-		ioutil.WriteFile(postFS+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
+		ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
 	}
 
 	for k, v := range response.Header {
