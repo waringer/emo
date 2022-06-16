@@ -93,7 +93,15 @@ func logRequest(r *http.Request) {
 	log.Println("called: ", r)
 
 	for k, v := range r.Header {
-		log.Printf("Header field %q, Value %q\n", k, v)
+		log.Printf("Request-Header field %q, Value %q\n", k, v)
+	}
+}
+
+func logResponse(r *http.Response) {
+	log.Println("called: ", r)
+
+	for k, v := range r.Header {
+		log.Printf("Response-Header field %q, Value %q\n", k, v)
 	}
 }
 
@@ -146,6 +154,7 @@ func makeApiRequest(r *http.Request) string {
 	body, _ := ioutil.ReadAll(response.Body)
 	log.Println("Server response: ", string(body))
 
+	logResponse(response)
 	return string(body)
 }
 
@@ -185,9 +194,6 @@ func makeTtsRequest(r *http.Request) string {
 		ioutil.WriteFile(postFS+time.Now().Format("20060102/")+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
 	}
 
-	for k, v := range response.Header {
-		log.Printf("Response Header field %q, Value %q\n", k, v)
-	}
-
+	logResponse(response)
 	return string(body)
 }
