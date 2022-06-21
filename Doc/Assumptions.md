@@ -1,0 +1,2 @@
+- The Secret for api.living.ai looks like an Base64url encoded Md5 hash of something
+- living.ai uses wit.ai for speech recognision and tts

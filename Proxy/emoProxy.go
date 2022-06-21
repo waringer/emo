@@ -15,14 +15,16 @@ import (
 )
 
 type emo_time struct {
-	Time int64 `json:"time"`
+	Time   int64 `json:"time"`
+	Offset int64 `jason:"offset"`
 }
 
 const (
-	livingio_api_server = "3.66.68.197"   // api.living.ai => 3.66.68.197
-	livingio_tts_server = "tts.living.ai" // tts.living.ai => 3.224.137.253
-	postFS              = "/tmp/"
-	logFileName         = "/var/log/emoProxy.log"
+	livingio_api_server    = "3.66.68.197"      // api.living.ai    => 3.66.68.197
+	livingio_tts_server    = "tts.living.ai"    // tts.living.ai    => 3.224.137.253 	[server name must be used]
+	livingio_res_eu_server = "res-eu.living.ai" // res-eu.living.ai => 47.254.186.106	[server name must be used]
+	postFS                 = "/tmp/"
+	logFileName            = "/var/log/emoProxy.log"
 )
 
 func main() {
@@ -46,7 +48,7 @@ func main() {
 	// handle time requests
 	http.HandleFunc("/time", func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
-		resp := emo_time{time.Now().Unix()}
+		resp := emo_time{time.Now().Unix(), 7200} //get offset from tz in query
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusCreated)
@@ -83,6 +85,73 @@ func main() {
 		w.WriteHeader(http.StatusCreated)
 
 		body := makeTtsRequest(r)
+		fmt.Fprint(w, body)
+	})
+
+	//handle res requests (fw update)
+	http.HandleFunc("/mp3/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		body, content_type := makeResRequest(r)
+
+		w.Header().Set("Content-Type", content_type)
+		w.WriteHeader(http.StatusCreated)
+
+		fmt.Fprint(w, body)
+	})
+
+	http.HandleFunc("/avi/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		body, content_type := makeResRequest(r)
+
+		w.Header().Set("Content-Type", content_type)
+		w.WriteHeader(http.StatusCreated)
+
+		fmt.Fprint(w, body)
+	})
+
+	http.HandleFunc("/mot/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		body, content_type := makeResRequest(r)
+
+		w.Header().Set("Content-Type", content_type)
+		w.WriteHeader(http.StatusCreated)
+
+		fmt.Fprint(w, body)
+	})
+
+	http.HandleFunc("/json/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		body, content_type := makeResRequest(r)
+
+		w.Header().Set("Content-Type", content_type)
+		w.WriteHeader(http.StatusCreated)
+
+		fmt.Fprint(w, body)
+	})
+
+	http.HandleFunc("/model/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		body, content_type := makeResRequest(r)
+
+		w.Header().Set("Content-Type", content_type)
+		w.WriteHeader(http.StatusCreated)
+
+		fmt.Fprint(w, body)
+	})
+
+	http.HandleFunc("/sdcard/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		body, content_type := makeResRequest(r)
+
+		w.Header().Set("Content-Type", content_type)
+		w.WriteHeader(http.StatusCreated)
+
 		fmt.Fprint(w, body)
 	})
 
@@ -200,4 +269,46 @@ func makeTtsRequest(r *http.Request) string {
 
 	logResponse(response)
 	return string(body)
+}
+
+func makeResRequest(r *http.Request) (string, string) {
+	request, _ := http.NewRequest("GET", "https://"+livingio_res_eu_server+r.URL.RequestURI(), nil)
+
+	val, exists := r.Header["Authorization"]
+	if exists {
+		request.Header.Add("Authorization", val[0])
+	}
+
+	val, exists = r.Header["Secret"]
+	if exists {
+		request.Header.Add("Secret", val[0])
+	}
+
+	request.Header.Del("User-Agent")
+
+	httpclient := &http.Client{}
+	response, err := httpclient.Do(request)
+
+	if err != nil {
+		log.Fatalf("An Error Occured %v", err)
+	}
+	defer response.Body.Close()
+
+	// read response
+	body, _ := ioutil.ReadAll(response.Body)
+
+	// write post request body to fs
+	dir := postFS + time.Now().Format("20060102/")
+	os.MkdirAll(dir, os.ModePerm)
+	switch response.Header.Get("Content-Type") {
+	case "application/json":
+		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
+	case "application/octet-stream":
+		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
+	default:
+		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
+	}
+
+	logResponse(response)
+	return string(body), response.Header.Get("Content-Type")
 }
