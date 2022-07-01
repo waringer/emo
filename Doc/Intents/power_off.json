@@ -1,0 +1,29 @@
+{
+    "queryText": "shutdown",
+    "intent": {
+        "name": "power_off",
+        "confidence": 1
+    },
+    "rec_behavior": "power_off",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "shut down",
+    "intent": {
+        "name": "power_off",
+        "confidence": 1
+    },
+    "rec_behavior": "power_off",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "power down",
+    "intent": {
+        "name": "power_off",
+        "confidence": 0.68222964
+    },
+    "rec_behavior": "power_off",
+    "behavior_paras": {}
+}

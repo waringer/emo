@@ -1,0 +1,14 @@
+{
+    "queryText": "install firmware",
+    "intent": {
+        "name": "update_firmware",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "update",
+        "update": {
+            "operation": "update"
+        }
+    }
+}

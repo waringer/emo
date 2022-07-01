@@ -1,0 +1,9 @@
+{
+    "queryText": "listen to",
+    "intent": {
+        "name": "listen_to_voice",
+        "confidence": 1
+    },
+    "rec_behavior": "listen",
+    "behavior_paras": {}
+}

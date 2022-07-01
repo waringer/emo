@@ -1,0 +1,11 @@
+{
+    "queryText": "less",
+    "intent": {
+        "name": "light_brightness_down",
+        "confidence": 0.63886285
+    },
+    "rec_behavior": "play_animation",
+    "behavior_paras": {
+        "animation_name": "dont_understand"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "queryText": "turn around",
+    "intent": {
+        "name": "turn_around",
+        "confidence": 1
+    },
+    "rec_behavior": "basic_move",
+    "behavior_paras": {
+        "type": "turn_around"
+    }
+}

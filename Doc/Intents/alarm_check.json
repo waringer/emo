@@ -1,0 +1,14 @@
+{
+    "queryText": "shut the alarm",
+    "intent": {
+        "name": "alarm_check",
+        "confidence": 0.6806673
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "alarm",
+        "alarm": {
+            "operation": "check"
+        }
+    }
+}

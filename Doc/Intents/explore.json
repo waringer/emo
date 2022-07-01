@@ -1,0 +1,9 @@
+{
+    "queryText": "explore",
+    "intent": {
+        "name": "explore",
+        "confidence": 0.7658132
+    },
+    "rec_behavior": "explore",
+    "behavior_paras": {}
+}

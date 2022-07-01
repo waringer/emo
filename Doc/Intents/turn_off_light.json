@@ -1,0 +1,15 @@
+{
+    "queryText": "and off",
+    "intent": {
+        "name": "turn_off_light",
+        "confidence": 0.6188978
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "light",
+        "light": {
+            "operation": "off",
+            "room": ""
+        }
+    }
+}

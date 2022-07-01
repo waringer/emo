@@ -1,0 +1,11 @@
+{
+    "queryText": "hi",
+    "intent": {
+        "name": "greeting",
+        "confidence": 1
+    },
+    "rec_behavior": "play_animation",
+    "behavior_paras": {
+        "animation_name": "Hi"
+    }
+}

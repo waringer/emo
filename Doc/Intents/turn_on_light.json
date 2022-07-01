@@ -1,0 +1,62 @@
+{
+    "queryText": "yellow",
+    "intent": {
+        "name": "turn_on_light",
+        "confidence": 0.7586669
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "light",
+        "light": {
+            "operation": "set_hsl",
+            "hsl": {
+                "0": 50,
+                "1": 100,
+                "2": 100
+            },
+            "room": ""
+        }
+    }
+}
+
+{
+    "queryText": "pink apartment",
+    "intent": {
+        "name": "turn_on_light",
+        "confidence": 0.618039
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "light",
+        "light": {
+            "operation": "set_hsl",
+            "hsl": {
+                "0": 330,
+                "1": 100,
+                "2": 100
+            },
+            "room": ""
+        }
+    }
+}
+
+{
+    "queryText": "cold",
+    "intent": {
+        "name": "turn_on_light",
+        "confidence": 0.61846554
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "light",
+        "light": {
+            "operation": "set_hsl",
+            "hsl": {
+                "0": 190,
+                "1": 10,
+                "2": 100
+            },
+            "room": ""
+        }
+    }
+}

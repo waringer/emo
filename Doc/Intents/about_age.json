@@ -1,0 +1,11 @@
+{
+    "queryText": "how old are you",
+    "intent": {
+        "name": "about_age",
+        "confidence": 1
+    },
+    "rec_behavior": "about_emo",
+    "behavior_paras": {
+        "type": "age"
+    }
+}

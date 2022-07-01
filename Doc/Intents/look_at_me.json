@@ -1,0 +1,9 @@
+{
+    "queryText": "look at me",
+    "intent": {
+        "name": "look_at_me",
+        "confidence": 1
+    },
+    "rec_behavior": "tree_search_and_interact",
+    "behavior_paras": {}
+}

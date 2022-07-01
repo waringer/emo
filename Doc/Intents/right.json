@@ -1,0 +1,11 @@
+{
+    "queryText": "turn right",
+    "intent": {
+        "name": "right",
+        "confidence": 1
+    },
+    "rec_behavior": "basic_move",
+    "behavior_paras": {
+        "type": "right"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "queryText": "Fox",
+    "intent": {
+        "name": "animal",
+        "confidence": 0.7190605
+    },
+    "rec_behavior": "play_animation",
+    "behavior_paras": {
+        "animation_name": "Fox"
+    }
+}
+
+{
+    "queryText": "less kinda cow",
+    "intent": {
+        "name": "animal",
+        "confidence": 0.68348044
+    },
+    "rec_behavior": "play_animation",
+    "behavior_paras": {
+        "animation_name": "Cattle"
+    }
+}

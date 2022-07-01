@@ -1,0 +1,74 @@
+{
+    "queryText": "medium",
+    "intent": {
+        "name": "volume_to",
+        "confidence": 0.7728583
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "volume",
+        "volume": {
+            "operation": "mid"
+        }
+    }
+}
+
+{
+    "queryText": "volume low",
+    "intent": {
+        "name": "volume_to",
+        "confidence": 0.69402164
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "volume",
+        "volume": {
+            "operation": "min"
+        }
+    }
+}
+
+{
+    "queryText": "low",
+    "intent": {
+        "name": "volume_to",
+        "confidence": 0.691889
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "volume",
+        "volume": {
+            "operation": "min"
+        }
+    }
+}
+
+{
+    "queryText": "mute",
+    "intent": {
+        "name": "volume_to",
+        "confidence": 0.7725801
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "volume",
+        "volume": {
+            "operation": "mute"
+        }
+    }
+}
+
+{
+    "queryText": "volume to high",
+    "intent": {
+        "name": "volume_to",
+        "confidence": 0.73374486
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "volume",
+        "volume": {
+            "operation": "max"
+        }
+    }
+}

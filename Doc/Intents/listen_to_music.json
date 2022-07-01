@@ -1,0 +1,23 @@
+{
+    "queryText": "dance to the music",
+    "intent": {
+        "name": "listen_to_music",
+        "confidence": 1
+    },
+    "rec_behavior": "dance",
+    "behavior_paras": {
+        "dance_type": "to_music"
+    }
+}
+
+{
+    "queryText": "listen to the music",
+    "intent": {
+        "name": "listen_to_music",
+        "confidence": 1
+    },
+    "rec_behavior": "dance",
+    "behavior_paras": {
+        "dance_type": "to_music"
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "queryText": "what's the weather",
+    "intent": {
+        "name": "weather",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "weather",
+        "weather": {
+            "main": "sunny",
+            "temp": 26.96
+        }
+    }
+}
+
+{
+    "queryText": "the weather",
+    "intent": {
+        "name": "weather",
+        "confidence": 0.8537656
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "weather",
+        "weather": {
+            "main": "cloudy",
+            "temp": 17.97
+        }
+    }
+}

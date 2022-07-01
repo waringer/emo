@@ -1,0 +1,23 @@
+{
+    "queryText": "hands up",
+    "intent": {
+        "name": "featured_game_shot",
+        "confidence": 1
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "shot"
+    }
+}
+
+{
+    "queryText": "freeze",
+    "intent": {
+        "name": "featured_game_shot",
+        "confidence": 1
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "shot"
+    }
+}

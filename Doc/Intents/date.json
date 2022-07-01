@@ -1,0 +1,11 @@
+{
+    "queryText": "date",
+    "intent": {
+        "name": "date",
+        "confidence": 0.64682275
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "date"
+    }
+}

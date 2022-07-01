@@ -1,0 +1,11 @@
+{
+    "queryText": "party",
+    "intent": {
+        "name": "dance_with_lights",
+        "confidence": 0.65871143
+    },
+    "rec_behavior": "dance",
+    "behavior_paras": {
+        "dance_type": "with_lights"
+    }
+}

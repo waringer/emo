@@ -1,0 +1,38 @@
+{
+    "queryText": "the time",
+    "intent": {
+        "name": "time",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "time",
+        "time": {}
+    }
+}
+
+{
+    "queryText": "what time is it",
+    "intent": {
+        "name": "time",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "time",
+        "time": {}
+    }
+}
+
+{
+    "queryText": "time",
+    "intent": {
+        "name": "time",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "time",
+        "time": {}
+    }
+}

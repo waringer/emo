@@ -1,0 +1,11 @@
+{
+    "queryText": "play by yourself",
+    "intent": {
+        "name": "play_by_yourself",
+        "confidence": 1
+    },
+    "rec_behavior": "play_around",
+    "behavior_paras": {
+        "play_type": "normal"
+    }
+}

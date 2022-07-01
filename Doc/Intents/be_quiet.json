@@ -1,0 +1,9 @@
+{
+    "queryText": "stop",
+    "intent": {
+        "name": "be_quiet",
+        "confidence": 1
+    },
+    "rec_behavior": "stay_still",
+    "behavior_paras": {}
+}

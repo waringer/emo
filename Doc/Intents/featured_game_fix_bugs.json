@@ -1,0 +1,35 @@
+{
+    "queryText": "fix bugs",
+    "intent": {
+        "name": "featured_game_fix_bugs",
+        "confidence": 1
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "fix_bugs"
+    }
+}
+
+{
+    "queryText": "let me fix some bugs for you",
+    "intent": {
+        "name": "featured_game_fix_bugs",
+        "confidence": 1
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "fix_bugs"
+    }
+}
+
+{
+    "queryText": "let me fix the bugs for you",
+    "intent": {
+        "name": "featured_game_fix_bugs",
+        "confidence": 1
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "fix_bugs"
+    }
+}

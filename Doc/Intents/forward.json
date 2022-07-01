@@ -1,0 +1,11 @@
+{
+    "queryText": "forward",
+    "intent": {
+        "name": "forward",
+        "confidence": 1
+    },
+    "rec_behavior": "basic_move",
+    "behavior_paras": {
+        "type": "forward"
+    }
+}

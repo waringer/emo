@@ -1,0 +1,11 @@
+{
+    "queryText": "battery",
+    "intent": {
+        "name": "battery",
+        "confidence": 0.81918705
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "battery"
+    }
+}

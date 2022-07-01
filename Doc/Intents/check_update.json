@@ -1,0 +1,14 @@
+{
+    "queryText": "check for update",
+    "intent": {
+        "name": "check_update",
+        "confidence": 0.7701751
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "update",
+        "update": {
+            "operation": "check"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "queryText": "play tic tac toe",
+    "intent": {
+        "name": "featured_game_ttt",
+        "confidence": 0.78755295
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "ttt"
+    }
+}

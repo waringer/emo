@@ -1,0 +1,11 @@
+{
+    "queryText": "the number one way to were able to do that is",
+    "intent": {
+        "name": "about_lucky_number",
+        "confidence": 0.6651854
+    },
+    "rec_behavior": "about_emo",
+    "behavior_paras": {
+        "type": "lucky_number"
+    }
+}

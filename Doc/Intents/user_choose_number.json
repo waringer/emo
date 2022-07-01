@@ -1,0 +1,87 @@
+{
+    "queryText": "5",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 5
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "I play at 3",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 3
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "4",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 4
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "8",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 8
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "9",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 9
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "3",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 3
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "let's 10",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 10
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}
+
+{
+    "queryText": "40",
+    "intent": {
+        "name": "user_choose_number",
+        "confidence": 1,
+        "number": 40
+    },
+    "rec_behavior": "",
+    "behavior_paras": {}
+}

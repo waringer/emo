@@ -1,0 +1,9 @@
+{
+    "queryText": "Let's Dance",
+    "intent": {
+        "name": "dance",
+        "confidence": 1
+    },
+    "rec_behavior": "dance",
+    "behavior_paras": {}
+}
