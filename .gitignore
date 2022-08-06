@@ -1,3 +1,6 @@
 responces/
 .vscode/
+.vs/
 *.code-workspace
+bt/bin/
+bt/obj/

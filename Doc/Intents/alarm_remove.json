@@ -1,0 +1,15 @@
+{
+    "queryText": "remove alarm",
+    "intent": {
+        "name": "alarm_remove",
+        "confidence": 0.63033426
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "alarm",
+        "alarm": {
+            "operation": "remove",
+            "index": ""
+        }
+    }
+}

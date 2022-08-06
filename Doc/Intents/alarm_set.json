@@ -1,0 +1,35 @@
+{
+    "queryText": "set an alarm at 7 a.m. every Tuesday",
+    "intent": {
+        "name": "alarm_set",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "alarm",
+        "alarm": {
+            "operation": "set",
+            "time": "07:00",
+            "recurrence": "TUE",
+            "tag": "alarm"
+        }
+    }
+}
+
+{
+    "queryText": "remind me to eat at 8 p.m. every Friday",
+    "intent": {
+        "name": "alarm_set",
+        "confidence": 1
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "alarm",
+        "alarm": {
+            "operation": "set",
+            "time": "20:00",
+            "recurrence": "FRI",
+            "tag": "eat"
+        }
+    }
+}

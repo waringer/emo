@@ -3,16 +3,30 @@
 ## Parameters
 - utility_type:
     - alarm
-        - operation: check
+    - timer
     - battery
     - update
-        - operation: check
-        - operation: update
     - date
     - time
     - light
     - volume
     - weather
+- alarm:
+    - operation: 
+        - check
+        - set
+        - remove
+    - time: \<*time, format 00:00*>
+    - recurrence:
+        - TUE
+        - FRI
+    - tag:
+        - alarm
+    - index: \<*number or empty*>
+- update:
+    - operation:
+        - check
+        - update
 - time: \<*empty?!*>
 - light:
     - operation:
@@ -34,4 +48,6 @@
         - sunny
         - cloudy
     - temp: \<*float with 2 digits; sperator is a dot*>
-
+- timer:
+    - operation: set
+    - duration: \<*number*>

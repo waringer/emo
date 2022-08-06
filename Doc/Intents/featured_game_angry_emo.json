@@ -1,0 +1,11 @@
+{
+    "queryText": "let's play Angry emo",
+    "intent": {
+        "name": "featured_game_angry_emo",
+        "confidence": 1
+    },
+    "rec_behavior": "featured_game",
+    "behavior_paras": {
+        "game_name": "angry_emo"
+    }
+}

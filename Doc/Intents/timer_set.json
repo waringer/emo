@@ -1,0 +1,15 @@
+{
+    "queryText": "the timer for 10 second",
+    "intent": {
+        "name": "timer_set",
+        "confidence": 0.708032
+    },
+    "rec_behavior": "utilities",
+    "behavior_paras": {
+        "utility_type": "timer",
+        "timer": {
+            "operation": "set",
+            "duration": 10
+        }
+    }
+}
