@@ -19,6 +19,11 @@ type emo_time struct {
 	Offset int64 `jason:"offset"`
 }
 
+type emo_code struct {
+	Code       int64  `json:"code"`
+	Errmessage string `json:"errmessage"`
+}
+
 const (
 	livingio_api_server    = "3.66.68.197"      // api.living.ai    => 3.66.68.197
 	livingio_tts_server    = "tts.living.ai"    // tts.living.ai    => 3.224.137.253 	[server name must be used]
@@ -51,7 +56,7 @@ func main() {
 		resp := emo_time{time.Now().Unix(), 7200} //get offset from tz in query
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(resp)
 	})
 
@@ -60,7 +65,7 @@ func main() {
 		logRequest(r)
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		body := makeApiRequest(r)
 		fmt.Fprint(w, body)
@@ -71,7 +76,7 @@ func main() {
 		logRequest(r)
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		body := makeApiRequest(r)
 		fmt.Fprint(w, body)
@@ -82,7 +87,7 @@ func main() {
 		logRequest(r)
 
 		w.Header().Set("Content-Type", "application/octet-stream")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		body := makeTtsRequest(r)
 		fmt.Fprint(w, body)
@@ -95,7 +100,7 @@ func main() {
 		body, content_type := makeResRequest(r)
 
 		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
 	})
@@ -106,7 +111,7 @@ func main() {
 		body, content_type := makeResRequest(r)
 
 		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
 	})
@@ -117,7 +122,7 @@ func main() {
 		body, content_type := makeResRequest(r)
 
 		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
 	})
@@ -128,7 +133,7 @@ func main() {
 		body, content_type := makeResRequest(r)
 
 		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
 	})
@@ -139,7 +144,7 @@ func main() {
 		body, content_type := makeResRequest(r)
 
 		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
 	})
@@ -150,9 +155,18 @@ func main() {
 		body, content_type := makeResRequest(r)
 
 		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
+	})
+
+	http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+		resp := emo_code{200, "OK"}
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(resp)
 	})
 
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(*Port), nil))

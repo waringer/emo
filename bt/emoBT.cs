@@ -152,7 +152,7 @@ namespace emo
             }
 
             _EMO_.Dispose();
-             return false;
+            return false;
         }
 
         public async Task<bool> SendAsync(ulong BluetoothAddress, byte[] Buffer)
@@ -247,5 +247,40 @@ namespace emo
     {
         public ulong BluetoothAddress { get; set; }
         public byte[] Message { get; set; }
+    }
+
+    public enum emoActions
+    {
+        Shaking = 0x0100,
+        Patting = 0x0200,
+        Lifted = 0x0301,
+        Falling = 0x0302,
+        Charging = 0x0303,
+        Cliff_Emering = 0x0400,
+        Headset_on_off = 0x0501,
+        Battery_very_low_warning = 0x0502,
+        Eye_Animation_Curious = 0x0503,
+        Eye_Animation_Blink = 0x0504,
+        Near_Wall = 0x0601,
+        Shutdown = 0x0800,
+        Play_game_animation = 0x0A00,
+        Listening = 0x0B00,
+        Answering_Smalltalk = 0x0C00,
+        Danceing = 0x0E00,
+        Answering_Utilities = 0x0F00,
+        Move = 0x1000,
+        Play_Animation = 0x1100,
+        answering_2 = 0x1200,
+        search_person = 0x1300,
+        found_person = 0x1500,
+        Standing_1 = 0x1700,
+        Sleeping = 0x1800,
+        Disturbed_while_sleeping = 0x1900,
+        Wakeup = 0x1A00,
+        Exploring = 0x1D00,
+        Look_Arround = 0x1F00,
+        Stay_idle_on_skateboard = 0x2000,
+        Standing_2 = 0x2100,
+        Play_time_of_day_animation = 0x2300,
     }
 }

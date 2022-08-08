@@ -55,7 +55,7 @@
 - 13 => {"type":"sta_rsp","data":{}}   
 
 ### {"data":{"op":"in"},"type":"face_req"}:  
-- => {"type":"face_rsp","data":{"result":1}} 
+- => {"type":"face_rsp","data":{"result":1}}  
 
 ### {"data":{"op":"syn"},"type":"face_req"}:  
 - => {"type":"face_rsp","data":{"faces":{"0":"*perosn a*","1":"*perosn b*"},"result":1}}  
@@ -66,12 +66,19 @@
 ### {"data":{"op":"out"},"type":"setting_req"}:  
 - => {"type":"setting_rsp","data":{"result":1}}  
 
-### {"data":{"op":"in"},"type":"anim_req"}:
-- => {"type":"anim_rsp","data":{"result":1}}
+### {"data":{"op":"in"},"type":"photo_req"}:  
+- => {"type":"photo_rsp","data":{"result":1}}  
+
+### {"data":{"op":"in"},"type":"anim_req"}:  
+- => {"type":"anim_rsp","data":{"result":1}}  
 
 ### {"type":"off_req"}:  
 - on skateboard, no shutdown => {"type":"off_rsp","data":{"result":0}}
 - off skateboard, power down => {"type":"off_rsp","data":{"result":1}}
+
+### {"data":{"op":"syn","server":{"ip":"*server ip*","port":*server port*}},"type":"photo_req"}:  
+- start?: {"type":"photo_rsp","data":{"result":1}}
+- finished?error?: {"type":"photo_rsp","data":{"result":3}}
 
 ### {"data":{"name":"*dancename*","op":"play"},"type":"anim_req"}:  
 - works only after emo is in "anim" mode => {"data":{"op":"in"},"type":"anim_req"}
@@ -100,7 +107,10 @@
 
 ### seen sended from app:
 - ddcc 1f 0000 0100 00000000000000000000000000 // enable status updates for 0x0000 ? (actions)  
-- ddcc 20 0200 0100 00000000000000000000000000 // enable status updated for 0x0200 ? (charge)  
+- ddcc 20 0200 0100 00000000000000000000000000 // enable status updates for 0x0200 ? (charge)  
+
+- ddcc 03 0000 0000 00000000000000000000000000 // disable status updates for 0x0000 ? (actions)  
+- ddcc 04 0200 0000 00000000000000000000000000 // disable status updates for 0x0200 ? (charge)  
 
 ### seen sended from emo:
 - DDCC 00 0200 5000 00000000000000000000000000 // charge 80%  
@@ -110,6 +120,7 @@
 - DDCC 00 0000 0200 00000000000000000000000000 // petted  
 - DDCC 00 0000 0205 00000000000000000000000000  
 - DDCC 00 0000 0301 00000000000000000000000000 // lifted  
+- DDCC 00 0000 0302 00000000000000000000000000 // falling  
 - DDCC 00 0000 0303 00000000000000000000000000 // charging  
 - DDCC 00 0000 0304 00000000000000000000000000  
 
@@ -117,28 +128,33 @@
 - DDCC 00 0000 0403 00000000000000000000000000  
 
 - DDCC 00 0000 0501 00000000000000000000000000 // Headset on/off  
-- DDCC 00 0000 0503 00000000000000000000000000 // eyes anim?  
-- DDCC 00 0000 0504 00000000000000000000000000 // eyes anim?  
+- DDCC 00 0000 0502 00000000000000000000000000 // battery very low warning?  
+- DDCC 00 0000 0503 00000000000000000000000000 // eyes anim? (curious) 
+- DDCC 00 0000 0504 00000000000000000000000000 // eyes anim? (blink) 
 
 - DDCC 00 0000 0601 00000000000000000000000000 // wall  
 - DDCC 00 0000 0602 00000000000000000000000000  
 
+- DDCC 00 0000 0800 00000000000000000000000000 // Shutdown
+
 - DDCC 00 0000 0A00 00000000000000000000000000 // play game animation - Roll dice, flip coin, lucky fruit...  
 - DDCC 00 0000 0B00 00000000000000000000000000 // listening  
-- DDCC 00 0000 0C00 00000000000000000000000000 // answering1  
+- DDCC 00 0000 0C00 00000000000000000000000000 // answering 1 (smalltalk)?  
 - DDCC 00 0000 0E00 00000000000000000000000000 // dancing  
-- DDCC 00 0000 0F00 00000000000000000000000000 // answer time date  
+- DDCC 00 0000 0F00 00000000000000000000000000 // Answering 3 (Utilities)? Date,Time,...  
+- DDCC 00 0000 1000 00000000000000000000000000 // move (on user request)  
 - DDCC 00 0000 1100 00000000000000000000000000 // Play animation  
-- DDCC 00 0000 1200 00000000000000000000000000 // answering2  
-- DDCC 00 0000 1300 00000000000000000000000000  
-- DDCC 00 0000 1700 00000000000000000000000000 // standing  
+- DDCC 00 0000 1200 00000000000000000000000000 // answering 2 ?  
+- DDCC 00 0000 1300 00000000000000000000000000 // search person? 
+- DDCC 00 0000 1500 00000000000000000000000000 // found person? 
+- DDCC 00 0000 1700 00000000000000000000000000 // standing 1 
 - DDCC 00 0000 1800 00000000000000000000000000 // sleep  
 - DDCC 00 0000 1900 00000000000000000000000000 // pet while sleep?  
 - DDCC 00 0000 1A00 00000000000000000000000000 // wakeup?  
 - DDCC 00 0000 1D00 00000000000000000000000000 // exploring  
 - DDCC 00 0000 1F00 00000000000000000000000000 // look arround?  
 - DDCC 00 0000 2000 00000000000000000000000000 // idle on Skateboard?  
-- DDCC 00 0000 2100 00000000000000000000000000  
+- DDCC 00 0000 2100 00000000000000000000000000 // standing 2 (staying in app?)  
 - DDCC 00 0000 2300 00000000000000000000000000 // play time of day animation   
 
 
