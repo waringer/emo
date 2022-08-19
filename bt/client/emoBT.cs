@@ -166,7 +166,7 @@ namespace emo
                     return (await _Characteristic_.WriteValueAsync(_Writer_.DetachBuffer(), GattWriteOption.WriteWithoutResponse) == GattCommunicationStatus.Success);
                 }
             }
-
+                                                                                                                                      
             return false;
         }
 
@@ -174,7 +174,7 @@ namespace emo
         {
             if (!_DeviceAdresses.Contains(args.BluetoothAddress))
             {
-                //Console.WriteLine($"Found device {args.BluetoothAddress} [{args.Advertisement.LocalName}]");
+                // Console.WriteLine($"Found device {args.BluetoothAddress} [{args.Advertisement.LocalName}]");
 
                 if (args.Advertisement.LocalName.StartsWith("EMO-"))
                 {
