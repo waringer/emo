@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <MyBLETest.h>
+#include <emoCoreBLE.h>
 
 #define SERIALSPEED 115200
 
@@ -10,11 +10,11 @@ void setup()
   Serial.begin(SERIALSPEED);
   pinMode(buttonPin, INPUT);
 
-  MyBLETest::setup();
+  emoCoreBLE::setup();
 }
 
 void loop()
 {
   int buttonState = digitalRead(buttonPin);
-  MyBLETest::loop(buttonState == HIGH);
+  emoCoreBLE::loop(buttonState == HIGH);
 }
