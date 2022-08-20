@@ -25,9 +25,9 @@ type emo_code struct {
 }
 
 const (
-	livingio_api_server    = "3.66.68.197"      // api.living.ai    => 3.66.68.197
-	livingio_tts_server    = "tts.living.ai"    // tts.living.ai    => 3.224.137.253 	[server name must be used]
-	livingio_res_eu_server = "res-eu.living.ai" // res-eu.living.ai => 47.254.186.106	[server name must be used]
+	livingio_api_server    = "api.living.ai"    // my dns point to own server, local hosts on server point to lai server
+	livingio_tts_server    = "eu-tts.living.ai" // [server name must be used]
+	livingio_res_eu_server = "res.living.ai"    // [server name must be used]
 	postFS                 = "/tmp/"
 	logFileName            = "/var/log/emoProxy.log"
 )
@@ -82,6 +82,15 @@ func main() {
 		fmt.Fprint(w, body)
 	})
 
+	http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+		resp := emo_code{200, "OK"}
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(resp)
+	})
+
 	// handle downloads
 	http.HandleFunc("/download/", func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
@@ -94,86 +103,20 @@ func main() {
 	})
 
 	//handle res requests (fw update)
-	http.HandleFunc("/mp3/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
 
-		body, content_type := makeResRequest(r)
-
-		w.Header().Set("Content-Type", content_type)
+		body := makeResRequest(r, w)
 		w.WriteHeader(http.StatusOK)
 
 		fmt.Fprint(w, body)
-	})
-
-	http.HandleFunc("/avi/", func(w http.ResponseWriter, r *http.Request) {
-		logRequest(r)
-
-		body, content_type := makeResRequest(r)
-
-		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprint(w, body)
-	})
-
-	http.HandleFunc("/mot/", func(w http.ResponseWriter, r *http.Request) {
-		logRequest(r)
-
-		body, content_type := makeResRequest(r)
-
-		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprint(w, body)
-	})
-
-	http.HandleFunc("/json/", func(w http.ResponseWriter, r *http.Request) {
-		logRequest(r)
-
-		body, content_type := makeResRequest(r)
-
-		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprint(w, body)
-	})
-
-	http.HandleFunc("/model/", func(w http.ResponseWriter, r *http.Request) {
-		logRequest(r)
-
-		body, content_type := makeResRequest(r)
-
-		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprint(w, body)
-	})
-
-	http.HandleFunc("/sdcard/", func(w http.ResponseWriter, r *http.Request) {
-		logRequest(r)
-
-		body, content_type := makeResRequest(r)
-
-		w.Header().Set("Content-Type", content_type)
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprint(w, body)
-	})
-
-	http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
-		logRequest(r)
-		resp := emo_code{200, "OK"}
-
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(resp)
 	})
 
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(*Port), nil))
 }
 
 func logRequest(r *http.Request) {
-	log.Println("called: ", r)
+	log.Println("request call: ", r)
 
 	for k, v := range r.Header {
 		log.Printf("Request-Header field %q, Value %q\n", k, v)
@@ -181,7 +124,7 @@ func logRequest(r *http.Request) {
 }
 
 func logResponse(r *http.Response) {
-	log.Println("called: ", r)
+	log.Println("responce call: ", r)
 
 	for k, v := range r.Header {
 		log.Printf("Response-Header field %q, Value %q\n", k, v)
@@ -285,7 +228,7 @@ func makeTtsRequest(r *http.Request) string {
 	return string(body)
 }
 
-func makeResRequest(r *http.Request) (string, string) {
+func makeResRequest(r *http.Request, w http.ResponseWriter) string {
 	request, _ := http.NewRequest("GET", "https://"+livingio_res_eu_server+r.URL.RequestURI(), nil)
 
 	val, exists := r.Header["Authorization"]
@@ -323,6 +266,10 @@ func makeResRequest(r *http.Request) (string, string) {
 		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
 	}
 
+	for k, _ := range response.Header {
+		w.Header().Set(k, response.Header.Get(k))
+	}
+
 	logResponse(response)
-	return string(body), response.Header.Get("Content-Type")
+	return string(body)
 }

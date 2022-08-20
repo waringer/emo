@@ -54,7 +54,9 @@
 - 12 => {"type":"sta_rsp","data":{"preference":{"volume":1,"temperature":0,"length":0,"auto_update":0,"schedule_sound":1}}}   
 - 13 => {"type":"sta_rsp","data":{}}   
 
+### {"data":{"operation":"start"},"type":"wifi_syn"}:
 ### {"data":{"operation":"stop"},"type":"wifi_syn"}:
+### {"data":{"password":"ddd","ssid":"step "},"type":"wifi_set"}:
 
 ### {"data":{"op":"in"},"type":"face_req"}:  
 - => {"type":"face_rsp","data":{"result":1}}  
@@ -74,15 +76,29 @@
 ### {"data":{"op":"in"},"type":"anim_req"}:  
 - => {"type":"anim_rsp","data":{"result":1}}  
 
+### {"data":{"name":"achv_1","op":"play"},"type":"anim_req"}:
+- => {"type":"anim_rsp","data":{"result":1}}  
+
 ### {"type":"off_req"}:  
 - on skateboard, no shutdown => {"type":"off_rsp","data":{"result":0}}
 - off skateboard, power down => {"type":"off_rsp","data":{"result":1}}
+
+### {"data":{"code":"","name":"Europe/Berlin","offset":7200},"type":"timezone_set"}:
+- todo
+
+### {"data":{"coord":{"lat":0.0,"lon":0.0},"country":"","id":0,"name":"Bonnrr","state":""},"type":"city_set"}:
+- todo
+
+### {"num":16,"type":"ota"}:
+- num is version to update to
+-> {"type":"ota_rsp","data":{"result":0}}  // if faild as emo is on version or newer
 
 ### {"data":{"op":"syn","server":{"ip":"*server ip*","port":*server port*}},"type":"photo_req"}:  
 - start?: {"type":"photo_rsp","data":{"result":1}}
 - finished?error?: {"type":"photo_rsp","data":{"result":3}}
 
 ### {"data":{"name":"*dancename*","op":"play"},"type":"anim_req"}:  
+### {"data":{"name":"*dancename*","op":"stop"},"type":"anim_req"}:  
 - works only after emo is in "anim" mode => {"data":{"op":"in"},"type":"anim_req"}
 - => {"type":"anim_rsp","data":{"result":1}}
     - dancenames:
@@ -166,5 +182,10 @@
 
 - DDCC 00 0000 2300 00000000000000000000000000 // play time of day animation [---]   
 
+### seen sended from debug app:
+- 55AA 55AA 21 1300000000000000000000000000 ED // Start test mode
+- 55AA 55AA 21 1700000000000000000000000000 ED // Cliff sensors test
+- 55AA 55AA 21 1A00000000000000000000000000 ED // Stop test mode
+- 55AA 55AA 21 1B00000000000000000000000000 ED // Shut down
 
 
