@@ -1,5 +1,14 @@
 #include "emoCoreBLE.h"
 
+#include <emoCoreBLEServerCallbacks.h>
+#include <emoCoreBLECharacteristicCallbacks.h>
+#include <emoCoreBLEDescriptorCallbacks.h>
+
+#define deviceName "ESP32"
+#define serverName "EMO-FFFF"
+#define SERVICE_UUID "0000ffe0-0000-1000-8000-00805f9b34fb"
+#define CHARACTERISTIC_UUID "0000ffe1-0000-1000-8000-00805f9b34fb"
+
 unsigned long lastTime = 0;
 unsigned long timerDelay = 60000;
 bool deviceConnected, oldDeviceConnected = false;
@@ -20,7 +29,7 @@ void sendTextResponse()
 {
   if (textResponseBuffer.length() != 0)
   {
-    uint8_t buffer[21] = {};
+    uint8_t buffer[20] = {};
     int bufferlen = 20;
     int pos = 0;
 
@@ -37,8 +46,8 @@ void sendTextResponse()
     else
     {
       bufferlen = textResponseBuffer.length() + 4;
-      textResponseBuffer.copy(((char *)buffer) + 4, bufferlen, pos);
-      pos += bufferlen;
+      textResponseBuffer.copy(((char *)buffer) + 4, bufferlen - 4, pos);
+      pos += bufferlen - 4;
     }
 
     do
@@ -75,7 +84,7 @@ void sendTextResponse()
 
 void sendBinResponse()
 {
-  if (binResponseBuffer[21] != 0x00)
+  if (binResponseBuffer[20] != 0x00)
   {
     notificationSend = false;
     bmeCharacteristics.setValue(binResponseBuffer, 20);
@@ -85,7 +94,7 @@ void sendBinResponse()
     {
     }
 
-    binResponseBuffer[21] = 0x00;
+    binResponseBuffer[20] = 0x00;
   }
 }
 
@@ -107,7 +116,7 @@ void emoCoreBLE::setup()
   bmeDescriptor.setCallbacks(new emoCoreBLEDescriptorCallbacks());
 
   bmeCharacteristics.addDescriptor(&bmeDescriptor);
-  bmeCharacteristics.setCallbacks(new emoCoreBLECharacteristicCallbacks(&notificationSend, &textResponseBuffer, binResponseBuffer));
+  bmeCharacteristics.setCallbacks(new emoCoreBLECharacteristicCallbacks(&notificationSend));
 
   // Start the service
   bmeService->start();
@@ -166,4 +175,19 @@ void emoCoreBLE::loop(bool useAlt)
     oldDeviceConnected = deviceConnected;
     lastTime = millis();
   }
+}
+
+void emoCoreBLE::sendText(const char *textCommand)
+{
+  textResponseBuffer += textCommand;
+}
+
+void emoCoreBLE::sendBin(u_int8_t binCommand[20])
+{
+  if (binCommand == nullptr)
+    return;
+
+  for (int i = 0; i < 20; i++)
+    binResponseBuffer[i] = binCommand[i];
+  binResponseBuffer[20] = 0xff;
 }

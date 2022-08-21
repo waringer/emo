@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="EMO-Pet Research Web Console">
+    <link rel="shortcut icon" type="image/jpg" href="favicon.ico" />
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>EMO-Pet Research Web Console</title>
+</head>
+
+<body>
+    <h1>EMO-Pet Research Web Console</h1>
+    <div class="binCommands">
+        <form method="post" class="binCommands">
+            <input type="hidden" name="cmdType" value="bin">
+
+            <label>Bin Command (20byte HEX):</label>
+            <select style="float: right;" onchange="selectBinTemplate(this.value)">
+                <option value="0">Empty command</option>
+                <option value="1">Report charge 80%</option>
+                <option value="2">Report shaking</option>
+            </select>
+            <br><br>
+            <input type="text" class="binByte" name="B00" maxlength="2" size="2" value="DD" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B01" maxlength="2" size="2" value="CC" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B02" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B03" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B04" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B05" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B06" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B07" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B08" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B09" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B10" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B11" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B12" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B13" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B14" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B15" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B16" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B17" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B18" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <input type="text" class="binByte" name="B19" maxlength="2" size="2" value="00" pattern="^[A-Fa-f0-9]+$"
+                required>
+            <br><br>
+            <input type="submit" value="Send bin command">
+        </form>
+    </div>
+    <br><br>
+    <div class="txtCommands">
+        <form method="post" class="txtCommands">
+            <input type="hidden" name="cmdType" value="txt">
+
+            <label>Text Command (Json):</label>
+            <br>
+            <input type="text" class="txtJson" name="T00" value="" required>
+            <br><br>
+            <input type="submit" value="Send txt command">
+        </form>
+    </div>
+</body>
+
+<script>
+    function selectBinTemplate(val) {
+        document.getElementsByName("B00")[0].value = '00';
+        document.getElementsByName("B01")[0].value = '00';
+        document.getElementsByName("B02")[0].value = '00';
+        document.getElementsByName("B03")[0].value = '00';
+        document.getElementsByName("B04")[0].value = '00';
+        document.getElementsByName("B05")[0].value = '00';
+        document.getElementsByName("B06")[0].value = '00';
+        document.getElementsByName("B07")[0].value = '00';
+        document.getElementsByName("B08")[0].value = '00';
+        document.getElementsByName("B09")[0].value = '00';
+        document.getElementsByName("B10")[0].value = '00';
+        document.getElementsByName("B11")[0].value = '00';
+        document.getElementsByName("B12")[0].value = '00';
+        document.getElementsByName("B13")[0].value = '00';
+        document.getElementsByName("B14")[0].value = '00';
+        document.getElementsByName("B15")[0].value = '00';
+        document.getElementsByName("B16")[0].value = '00';
+        document.getElementsByName("B17")[0].value = '00';
+        document.getElementsByName("B18")[0].value = '00';
+        document.getElementsByName("B19")[0].value = '00';
+
+        switch (val) {
+            case "0":
+                document.getElementsByName("B00")[0].value = 'DD';
+                document.getElementsByName("B01")[0].value = 'CC';
+                break;
+            case "1":
+                document.getElementsByName("B00")[0].value = 'DD';
+                document.getElementsByName("B01")[0].value = 'CC';
+                document.getElementsByName("B03")[0].value = '02';
+                document.getElementsByName("B05")[0].value = '50';
+                break;
+            case "2":
+                document.getElementsByName("B00")[0].value = 'DD';
+                document.getElementsByName("B01")[0].value = 'CC';
+                document.getElementsByName("B05")[0].value = '01';
+                break;
+
+            default:
+                break;
+        }
+    }
+</script>
+
+</html>

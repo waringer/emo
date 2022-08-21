@@ -1,0 +1,47 @@
+body {
+    background-color: beige;
+    color: black;
+    width: 75%;
+    margin-left: 12%;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+}
+
+div.binCommands {
+    display: inline-block;
+    width: 100%;
+}
+
+div.txtCommands {
+    width: 100%;
+}
+
+form.binCommands {
+    display: inline-block;
+}
+
+form.txtCommands {
+    /* display: inline-block; */
+}
+
+
+a,
+a:visited {
+    color: darkblue;
+}
+
+a:hover {
+    color: black;
+}
+
+input.binByte {
+    text-align: center;
+}
+
+input.txtJson {
+    text-align: left;
+    width: 80%;
+}

@@ -33,6 +33,10 @@ namespace bt
                     case ConsoleKey.Q:
                         if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"type\":\"off_req\"}"))) Console.WriteLine("Failed to Send 'Quit'");
                         break;
+						
+                    case ConsoleKey.U:
+                        if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"num\":23,\"type\":\"ota\"}"))) Console.WriteLine("Failed to Send 'Update'");
+                        break;
 
                     case ConsoleKey.NumPad1:
                         if (!await _emo_.SendAsync(_BluetoothAddress, _emo_.MakeCommandByteArray(0x00, new byte[] { (byte)(_IsCTRL_ ? 0x00 : 0x01) }))) Console.WriteLine("Failed to Send 'subscribe actions'");

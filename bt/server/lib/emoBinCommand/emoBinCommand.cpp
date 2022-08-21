@@ -1,5 +1,7 @@
 #include "emoBinCommand.h"
 
+uint8_t outBuffer[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
 bool isBinCommand(u_int8_t *inMessage, size_t dataLen)
 {
     if (dataLen != 20)
@@ -14,7 +16,7 @@ bool isBinCommand(u_int8_t *inMessage, size_t dataLen)
     return isCommand;
 }
 
-bool parseBinCommand(u_int8_t *inMessage, size_t dataLen, u_int8_t *outBuffer)
+u_int8_t *parseBinCommand(u_int8_t *inMessage, size_t dataLen)
 {
     if ((*inMessage == 0xdd) && (*(inMessage + 1) == 0xcc))
     {
@@ -28,21 +30,23 @@ bool parseBinCommand(u_int8_t *inMessage, size_t dataLen, u_int8_t *outBuffer)
             printBuffer(inMessage + 5, 1);
             Serial.println("]");
 
+            for (int i = 0; i < 20; i++)
+                outBuffer[i] = 0x00;
+
             outBuffer[0] = 0xdd;
             outBuffer[1] = 0xcc;
             outBuffer[2] = 0x00;
             outBuffer[3] = 0x02;
             outBuffer[4] = 0x00;
             outBuffer[5] = 0x50;
-            outBuffer[21] = 0xff;
-            return true;
+            return outBuffer;
         }
         else if ((*(inMessage + 3) == 0x00) && (*(inMessage + 4) == 0x00))
         {
             Serial.print("action sub: [");
             printBuffer(inMessage + 5, 1);
             Serial.println("]");
-            return false;
+            return nullptr;
         }
     }
 
@@ -51,14 +55,14 @@ bool parseBinCommand(u_int8_t *inMessage, size_t dataLen, u_int8_t *outBuffer)
         Serial.print("debug command: [");
         printBuffer(inMessage, dataLen);
         Serial.println("]");
-        return false;
+        return nullptr;
     }
 
     Serial.print("Unknown command received:[");
     printBuffer(inMessage, dataLen);
     Serial.println("]");
 
-    return false;
+    return nullptr;
 }
 
 void printByte(u_int8_t in)

@@ -166,7 +166,7 @@ namespace emo
                     return (await _Characteristic_.WriteValueAsync(_Writer_.DetachBuffer(), GattWriteOption.WriteWithoutResponse) == GattCommunicationStatus.Success);
                 }
             }
-                                                                                                                                      
+
             return false;
         }
 
@@ -251,34 +251,41 @@ namespace emo
 
     public enum emoActions
     {
-        Shaking = 0x0100,
-        Patting = 0x0200,
-        Lifted = 0x0301,
-        Falling = 0x0302,
+        Being_shaken = 0x0100,
+        Being_petted = 0x0200,
+        Picked_up = 0x0301,
+        Falls_down = 0x0302,
         Charging = 0x0303,
-        Cliff_Emering = 0x0400,
-        Headset_on_off = 0x0501,
-        Battery_very_low_warning = 0x0502,
+        Emerging_from_cliff = 0x0400,
+        Headset_change = 0x0501,
+        Low_power = 0x0502,
         Eye_Animation_Curious = 0x0503,
         Eye_Animation_Blink = 0x0504,
-        Near_Wall = 0x0601,
+        Obstacles_detected = 0x0601,
+        Sound_detected = 0x0602,
         Shutdown = 0x0800,
-        Play_game_animation = 0x0A00,
+        Playing_games = 0x0900,
+        Having_fun = 0x0A00,
         Listening = 0x0B00,
-        Answering_Smalltalk = 0x0C00,
-        Danceing = 0x0E00,
-        Answering_Utilities = 0x0F00,
-        Move = 0x1000,
+        Speaking = 0x0C00,
+        Playing_music = 0x0D00,
+        Dancing = 0x0E00,
+        Being_helpful = 0x0F00,
+        Moving = 0x1000,
         Play_Animation = 0x1100,
-        answering_2 = 0x1200,
-        search_person = 0x1300,
-        found_person = 0x1500,
-        Standing_1 = 0x1700,
+        Answering_questions = 0x1200,
+        Moving_to_target = 0x1300,
+        Looking_at_face1 = 0x1400,
+        Looking_at_face2 = 0x1500,
+        Sees_nonhuman = 0x1600,
+        Staying = 0x1700,
         Sleeping = 0x1800,
         Disturbed_while_sleeping = 0x1900,
         Wakeup = 0x1A00,
+        Looking_around = 0x1B00,
         Exploring = 0x1D00,
-        Look_Arround = 0x1F00,
+        Searching = 0x1E00,
+        Playing = 0x1F00,
         Stay_idle_on_skateboard = 0x2000,
         Standing_2 = 0x2100,
         Play_time_of_day_animation = 0x2300,
