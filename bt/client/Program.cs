@@ -16,6 +16,7 @@ namespace bt
 
             var _emo_ = new emoBT();
             _emo_.NewEMOFound += newEMOFound;
+            _emo_.EMODisconnected += EMODisconnected;
             _emo_.NewEMOTextMessage += newEMOTextMessage;
             _emo_.NewEMOBinMessage += newEMOBinMessageAsync;
             _emo_.startScanner();
@@ -68,9 +69,10 @@ namespace bt
             _emo_.Dispose();
         }
 
-        private static async void newEMOFound(object sender, NewEMOFoundEventArgs e)
+        private static async void newEMOFound(object sender, EMOEventArgs e)
         {
             var _EMO_ = (emoBT)sender;
+            _EMO_.stopScanner();
             if (await _EMO_.connectEMOAsync(e.BluetoothAddress))
             {
                 Console.WriteLine($"EMO {e.BluetoothAddress:X} connected!");
@@ -83,10 +85,17 @@ namespace bt
             else
             {
                 Console.WriteLine($"EMO {e.BluetoothAddress} failed to connect!");
+                _EMO_.startScanner();
             }
         }
 
-        private static void newEMOTextMessage(object sender, NewEMOTextMessageEventArgs e) => Console.WriteLine($"{e.Message}");
+        private static void EMODisconnected(object sender, EMOEventArgs e)
+        {
+            var _EMO_ = (emoBT)sender;
+            _EMO_.startScanner();
+        }
+
+        private static void newEMOTextMessage(object sender, EMOTextMessageEventArgs e) => Console.WriteLine($"{e.Message}");
 
         private static async void newEMOBinMessageAsync(object sender, NewEMOBinMessageEventArgs e) => await ParseBinMessageAsync((emoBT)sender, e.Message);
 

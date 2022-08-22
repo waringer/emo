@@ -54,21 +54,40 @@
 - 12 => {"type":"sta_rsp","data":{"preference":{"volume":1,"temperature":0,"length":0,"auto_update":0,"schedule_sound":1}}}   
 - 13 => {"type":"sta_rsp","data":{}}   
 
+### {"data":{"op":"in"},"type":"setting_req"}:  
+### {"data":{"op":"out"},"type":"setting_req"}:  
+- => {"type":"setting_rsp","data":{"result":1}}  
+
 ### {"data":{"operation":"start"},"type":"wifi_syn"}:
 ### {"data":{"operation":"stop"},"type":"wifi_syn"}:
 ### {"data":{"password":"ddd","ssid":"step "},"type":"wifi_set"}:
+- todo  
 
 ### {"data":{"op":"in"},"type":"face_req"}:  
+### {"data":{"op":"out"},"type":"face_req"}:  
 - => {"type":"face_rsp","data":{"result":1}}  
 
 ### {"data":{"op":"syn"},"type":"face_req"}:  
 - => {"type":"face_rsp","data":{"faces":{"0":"*perosn a*","1":"*perosn b*"},"result":1}}  
 
-### {"data":{"op":"in"},"type":"setting_req"}:  
-- => {"type":"setting_rsp","data":{"result":1}}  
+### {"data":{"id":"0","op":"del"},"type":"face_req"}:  
+- => {"type":"face_rsp","data":{"result":1}}  
 
-### {"data":{"op":"out"},"type":"setting_req"}:  
-- => {"type":"setting_rsp","data":{"result":1}}  
+### {"data":{"id":"0","name":"*perosn a*","op":"rename"},"type":"face_req"}:  
+- =>   
+
+### {"data":{"id":"1","op":"rescan"},"type":"face_req"}:  
+- => {"type":"face_rsp","data":{"result":1}}  
+
+### {"data":{"name":"*perosn a*","op":"add"},"type":"face_req"}  
+- => {"type":"face_rsp","data":{"result":1}}  
+
+### {"data":{"op":"in"},"type":"customize_req"}:  
+### {"data":{"op":"out"},"type":"customize_req"}:  
+- => {"type":"eye_rsp","data":{"result":1}}  
+
+### {"data":{"image":{"length":26662,"name":"sticker.png","tran":100},"op":"set_eye","server":{"ip":"*ip of app device*","port":9090}},"type":"customize_req"};
+- no responce needed?
 
 ### {"data":{"op":"in"},"type":"photo_req"}:  
 - => {"type":"photo_rsp","data":{"result":1}}  
@@ -124,16 +143,20 @@
 - six and after are parameters?!
 
 ### seen sended from app:
-- ddcc 1f 0000 0100 00000000000000000000000000 // enable status updates for 0x0000 ? (actions)  
-- ddcc 20 0200 0100 00000000000000000000000000 // enable status updates for 0x0200 ? (charge)  
+- DDCC xx 0000 0100 00000000000000000000000000 // enable status updates for 0x0000 ? (actions)  
+- DDCC xx 0200 0100 00000000000000000000000000 // enable status updates for 0x0200 ? (charge)  
 
-- ddcc 03 0000 0000 00000000000000000000000000 // disable status updates for 0x0000 ? (actions)  
-- ddcc 04 0200 0000 00000000000000000000000000 // disable status updates for 0x0200 ? (charge)  
+- DDCC xx 0000 0000 00000000000000000000000000 // disable status updates for 0x0000 ? (actions)  
+- DDCC xx 0200 0000 00000000000000000000000000 // disable status updates for 0x0200 ? (charge)  
+
+- DDCC xx 0301 0000 00000000000000000000000000 // stop play
+- DDCC xx 0302 0100 00000000000000000000000000 // play modern ludo
+- DDCC xx 0302 0200 00000000000000000000000000 // play rhythmatic tap
+- DDCC xx 0302 0300 00000000000000000000000000 // play angry emo
+- DDCC xx 0302 0400 00000000000000000000000000 // play treasure hunt
+- DDCC xx 0302 0600 00000000000000000000000000 // play dance repeat
 
 ### seen sended from emo:
-- DDCC 00 0200 5000 00000000000000000000000000 // charge 80%  
-- DDCC 00 0200 6400 00000000000000000000000000 // charge 100%  
-
 - DDCC 00 0000 0100 00000000000000000000000000 // shaking [Being shaken]  
 - DDCC 00 0000 0200 00000000000000000000000000 // petted [Being petted]  
 - DDCC 00 0000 0205 00000000000000000000000000 // [---] 
@@ -181,6 +204,9 @@
 - DDCC 00 0000 2100 00000000000000000000000000 // standing 2 [---]  
 
 - DDCC 00 0000 2300 00000000000000000000000000 // play time of day animation [---]   
+
+- DDCC 00 0200 5000 00000000000000000000000000 // charge 80%  
+- DDCC 00 0200 6400 00000000000000000000000000 // charge 100%  
 
 ### seen sended from debug app:
 - 55AA 55AA 21 1300000000000000000000000000 ED // Start test mode

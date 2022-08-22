@@ -78,8 +78,8 @@ const char *parseTextCommand(const char *inMessage)
 
             responce += "}}";
 
-            Serial.print("responce:");
-            Serial.println(responce.c_str());
+            // Serial.print("responce:");
+            // Serial.println(responce.c_str());
             response += responce;
         }
 
@@ -88,6 +88,26 @@ const char *parseTextCommand(const char *inMessage)
 
         if (reqType == "anim_req")
             response += "{\"type\":\"anim_rsp\",\"data\":{\"result\":1}}";
+
+        if (reqType == "face_req")
+        {
+            std::string op((const char *)doc["data"]["op"]);
+            if (op == "in")
+                response += "{\"type\":\"face_rsp\",\"data\":{\"result\":1}}";
+            if (op == "out")
+                response += "{\"type\":\"face_rsp\",\"data\":{\"result\":1}}";
+            if (op == "syn")
+                response += "{\"type\":\"face_rsp\",\"data\":{\"faces\":{\"0\":\"perosn a\",\"1\":\"perosn b\"},\"result\":1}}";
+            if (op == "del")
+                response += "{\"type\":\"face_rsp\",\"data\":{\"result\":1}}";
+            if (op == "rescan")
+                response += "{\"type\":\"face_rsp\",\"data\":{\"result\":1}}";
+            if (op == "add")
+                response += "{\"type\":\"face_rsp\",\"data\":{\"result\":1}}";
+        }
+
+        if (reqType == "customize_req")
+            response += "{\"type\":\"eye_rsp\",\"data\":{\"result\":1}}";
 
         if (reqType == "off_rsp")
             response += "{\"type\":\"off_rsp\",\"data\":{\"result\":0}}";

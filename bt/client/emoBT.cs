@@ -18,8 +18,9 @@ namespace emo
         private byte _CommandCounter = 0;
         private bool _IsDisposed;
 
-        public event EventHandler<NewEMOFoundEventArgs> NewEMOFound;
-        public event EventHandler<NewEMOTextMessageEventArgs> NewEMOTextMessage;
+        public event EventHandler<EMOEventArgs> NewEMOFound;
+        public event EventHandler<EMOEventArgs> EMODisconnected;
+        public event EventHandler<EMOTextMessageEventArgs> NewEMOTextMessage;
         public event EventHandler<NewEMOBinMessageEventArgs> NewEMOBinMessage;
 
         public emoBT()
@@ -61,15 +62,21 @@ namespace emo
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void OnNewDeviceFound(NewEMOFoundEventArgs e)
+        protected virtual void OnNewDeviceFound(EMOEventArgs e)
         {
-            EventHandler<NewEMOFoundEventArgs> handler = NewEMOFound;
+            EventHandler<EMOEventArgs> handler = NewEMOFound;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnNewEMOTextMessage(NewEMOTextMessageEventArgs e)
+        protected virtual void OnEMODisconnected(EMOEventArgs e)
         {
-            EventHandler<NewEMOTextMessageEventArgs> handler = NewEMOTextMessage;
+            EventHandler<EMOEventArgs> handler = EMODisconnected;
+            if (handler != null) handler(this, e);
+        }
+
+        protected virtual void OnNewEMOTextMessage(EMOTextMessageEventArgs e)
+        {
+            EventHandler<EMOTextMessageEventArgs> handler = NewEMOTextMessage;
             if (handler != null) handler(this, e);
         }
 
@@ -81,9 +88,24 @@ namespace emo
 
         public void startScanner()
         {
+            _DeviceAdresses.Clear();
+            _ConnectedDevices.Clear();
+            _TextMessageBuffer.Clear();
+
             _Scanner = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Passive };
             _Scanner.Received += newDevice;
             _Scanner.Start();
+            Console.WriteLine("Scanner started");
+        }
+
+        public void stopScanner()
+        {
+            if (_Scanner != null)
+            {
+                _Scanner.Stop();
+                _Scanner = null;
+                Console.WriteLine("Scanner stopped");
+            }
         }
 
         public static byte[] Text2ByteArray(string Text)
@@ -145,6 +167,9 @@ namespace emo
 
                             _ConnectedDevices.Add(BluetoothAddress, _Characteristic_);
                             Console.WriteLine("\t\t\tSubscribed");
+
+                            _EMO_.ConnectionStatusChanged += ConnectionStatusChanged;
+
                             return true;
                         }
                     }
@@ -153,6 +178,12 @@ namespace emo
 
             _EMO_.Dispose();
             return false;
+        }
+
+        private void ConnectionStatusChanged(BluetoothLEDevice sender, object args)
+        {
+            if (sender.ConnectionStatus == BluetoothConnectionStatus.Disconnected)
+                OnEMODisconnected(new EMOEventArgs() { BluetoothAddress = sender.BluetoothAddress });
         }
 
         public async Task<bool> SendAsync(ulong BluetoothAddress, byte[] Buffer)
@@ -179,7 +210,7 @@ namespace emo
                 if (args.Advertisement.LocalName.StartsWith("EMO-"))
                 {
                     _DeviceAdresses.Add(args.BluetoothAddress);
-                    OnNewDeviceFound(new NewEMOFoundEventArgs() { BluetoothAddress = args.BluetoothAddress });
+                    OnNewDeviceFound(new EMOEventArgs() { BluetoothAddress = args.BluetoothAddress });
                     //Console.WriteLine($"{_device_.DeviceId}=>{_device_.BluetoothAddress} [{_device_.Name}] {RawSignalStrengthInDBm}");
                 }
             }
@@ -224,7 +255,7 @@ namespace emo
                     if (_TextMessageBuffer.Count >= _TextLen_ + 4)
                     {
                         _TextMessageBuffer.RemoveRange(0, 4);
-                        OnNewEMOTextMessage(new NewEMOTextMessageEventArgs() { BluetoothAddress = sender.Service.Device.BluetoothAddress, Message = Encoding.ASCII.GetString(_TextMessageBuffer.ToArray()) });
+                        OnNewEMOTextMessage(new EMOTextMessageEventArgs() { BluetoothAddress = sender.Service.Device.BluetoothAddress, Message = Encoding.ASCII.GetString(_TextMessageBuffer.ToArray()) });
                         _TextMessageBuffer.Clear();
                     }
                 }
@@ -232,12 +263,12 @@ namespace emo
         }
     }
 
-    public class NewEMOFoundEventArgs : EventArgs
+    public class EMOEventArgs : EventArgs
     {
         public ulong BluetoothAddress { get; set; }
     }
 
-    public class NewEMOTextMessageEventArgs : EventArgs
+    public class EMOTextMessageEventArgs : EventArgs
     {
         public ulong BluetoothAddress { get; set; }
         public string Message { get; set; }
