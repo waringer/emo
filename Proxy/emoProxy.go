@@ -16,7 +16,7 @@ import (
 
 type emo_time struct {
 	Time   int64 `json:"time"`
-	Offset int64 `jason:"offset"`
+	Offset int `jason:"offset"`
 }
 
 type emo_code struct {
@@ -53,7 +53,8 @@ func main() {
 	// handle time requests
 	http.HandleFunc("/time", func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
-		resp := emo_time{time.Now().Unix(), 7200} //get offset from tz in query
+		_, dtsDiff := time.Now().Zone()
+		resp := emo_time{time.Now().Unix(), dtsDiff} // get offset from tz in query
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
