@@ -31,6 +31,14 @@ namespace bt
 
                 switch (_Key_.Key)
                 {
+                    case ConsoleKey.R:
+                        if (_emo_.isScanning)
+                        {
+                            _emo_.stopScanner();
+                            _emo_.startScanner();
+                        }
+                        break;
+
                     case ConsoleKey.Q:
                         if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"type\":\"off_req\"}"))) Console.WriteLine("Failed to Send 'Quit'");
                         break;
@@ -52,9 +60,9 @@ namespace bt
                         if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"data\":{\"request\":[0]},\"type\":\"sta_req\"}"))) Console.WriteLine("Failed to Send 'status request 0 (device id)'");
                         break;
 
-                        // case ConsoleKey.NumPad7:
-                        //     if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"data\":{\"request\":[10]},\"type\":\"sta_req\"}"))) Console.WriteLine("Failed to Send 'status request 10 (dances)'");
-                        //     break;
+                    case ConsoleKey.NumPad7:
+                        if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"data\":{\"request\":[13]},\"type\":\"sta_req\"}"))) Console.WriteLine("Failed to Send 'status request 13 (???)'");
+                        break;
 
                         // case ConsoleKey.NumPad8:
                         //     if (!await _emo_.SendAsync(_BluetoothAddress, emoBT.Text2ByteArray("{\"data\":{\"op\":\"" + (_IsCTRL_ ? "out" : "in") + "\"},\"type\":\"anim_req\"}"))) Console.WriteLine("Failed to Send 'NumPad8'");

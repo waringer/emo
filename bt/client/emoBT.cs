@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
@@ -107,6 +108,8 @@ namespace emo
                 Console.WriteLine("Scanner stopped");
             }
         }
+
+        public bool isScanning => _Scanner != null;
 
         public static byte[] Text2ByteArray(string Text)
         {
@@ -292,6 +295,7 @@ namespace emo
         Low_power = 0x0502,
         Eye_Animation_Curious = 0x0503,
         Eye_Animation_Blink = 0x0504,
+        Link_HomeStation = 0x0507,
         Obstacles_detected = 0x0601,
         Sound_detected = 0x0602,
         Shutdown = 0x0800,
@@ -320,5 +324,8 @@ namespace emo
         Stay_idle_on_skateboard = 0x2000,
         Standing_2 = 0x2100,
         Play_time_of_day_animation = 0x2300,
+        Going_Home = 0x2400,
+        Seek_HomeStation = 0x2500,
+        Leave_Home = 0x2600,
     }
 }

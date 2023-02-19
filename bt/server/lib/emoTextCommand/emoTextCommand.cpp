@@ -69,6 +69,11 @@ const char *parseTextCommand(const char *inMessage)
                 case 12:
                     responce += "\"preference\":{\"volume\":1,\"temperature\":0,\"length\":0,\"auto_update\":0,\"schedule_sound\":1}";
                     break;
+                case 13:
+                    // responce += "\"home\":{\"connected\":0,\"id\":\"\",\"wifi\":\"\",\"v_number\":-1,\"v_name\":\"\"}";
+                    // responce += "\"home\":{\"connected\":1,\"id\":\"ffff\",\"wifi\":\"mywlanssid\",\"v_number\":2,\"v_name\":\"1.1.1.p1\"}";
+                    responce += "\"home\":{\"connected\":1,\"id\":\"ffff\",\"wifi\":\"\",\"v_number\":1,\"v_name\":\"1.0.0\"}";
+                    break;
 
                 default:
                     responce += "";
@@ -88,6 +93,9 @@ const char *parseTextCommand(const char *inMessage)
 
         if (reqType == "anim_req")
             response += "{\"type\":\"anim_rsp\",\"data\":{\"result\":1}}";
+
+        if (reqType == "home_req")
+            response += "{\"type\":\"home_rsp\",\"data\":{\"result\":1}}";
 
         if (reqType == "face_req")
         {
