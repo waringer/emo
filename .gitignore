@@ -2,5 +2,5 @@ responces/
 .vscode/
 .vs/
 *.code-workspace
-bt/client/bin/
-bt/client/obj/
+**/bin/
+**/obj/

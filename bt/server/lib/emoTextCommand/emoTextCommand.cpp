@@ -52,7 +52,7 @@ const char *parseTextCommand(const char *inMessage)
                     responce += "\"alarm\":{\"state\":[]}";
                     break;
                 case 7:
-                    responce += "\"city\":{\"id\":0,\"name\":\"Bonn\",\"state\":\"\",\"country\":\"\",\"coord\":{\"lon\":0,\"lat\":0}}";
+                    responce += "\"city\":{\"id\":0,\"name\":\"Bonn\",\"state\":\"Berlin\",\"country\":\"DE\",\"coord\":{\"lon\":49.123456,\"lat\":10.123456}}";
                     break;
                 case 8:
                     responce += "\"timezone\":{\"name\":\"Europe/Berlin\",\"code\":\"\",\"offset\":7200}";

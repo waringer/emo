@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
@@ -122,7 +121,7 @@ namespace emo
             return _bytes_.ToArray();
         }
 
-        public byte[] MakeCommandByteArray(UInt16 Command, byte[] Parameters)
+        public byte[] MakeCommandByteArray(ushort Command, byte[] Parameters)
         {
             var _CommandBytes_ = BitConverter.GetBytes(Command);
 
