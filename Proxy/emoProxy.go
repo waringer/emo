@@ -25,11 +25,12 @@ type emo_code struct {
 }
 
 const (
-	livingio_api_server    = "api.living.ai"    // my dns point to own server, local hosts on server point to lai server
-	livingio_tts_server    = "eu-tts.living.ai" // [server name must be used]
-	livingio_res_eu_server = "res.living.ai"    // [server name must be used]
-	postFS                 = "/tmp/"
-	logFileName            = "/var/log/emoProxy.log"
+	livingio_api_server     = "api.living.ai"    // my dns point to own server, local hosts on server point to lai server
+	livingio_api_tts_server = "eu-api.living.ai" // [server name must be used]
+	livingio_tts_server     = "eu-tts.living.ai" // [server name must be used]
+	livingio_res_eu_server  = "res.living.ai"    // [server name must be used]
+	postFS                  = "/tmp/"
+	logFileName             = "/var/log/emoProxy.log"
 )
 
 func main() {
@@ -111,6 +112,17 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 
 		body := makeTtsRequest(r)
+		fmt.Fprint(w, body)
+	})
+
+	// handle tts
+	http.HandleFunc("/tts/", func(w http.ResponseWriter, r *http.Request) {
+		logRequest(r)
+
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.WriteHeader(http.StatusOK)
+
+		body := makeApiTtsRequest(r)
 		fmt.Fprint(w, body)
 	})
 
@@ -200,6 +212,48 @@ func makeApiRequest(r *http.Request) string {
 
 func makeTtsRequest(r *http.Request) string {
 	request, _ := http.NewRequest("GET", "http://"+livingio_tts_server+r.URL.RequestURI(), nil)
+
+	val, exists := r.Header["Authorization"]
+	if exists {
+		request.Header.Add("Authorization", val[0])
+	}
+
+	val, exists = r.Header["Secret"]
+	if exists {
+		request.Header.Add("Secret", val[0])
+	}
+
+	request.Header.Del("User-Agent")
+
+	httpclient := &http.Client{}
+	response, err := httpclient.Do(request)
+
+	if err != nil {
+		log.Fatalf("An Error Occured %v", err)
+	}
+	defer response.Body.Close()
+
+	// read response
+	body, _ := ioutil.ReadAll(response.Body)
+
+	// write post request body to fs
+	dir := postFS + time.Now().Format("20060102/")
+	os.MkdirAll(dir, os.ModePerm)
+	switch response.Header.Get("Content-Type") {
+	case "application/json":
+		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
+	case "application/octet-stream":
+		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
+	default:
+		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
+	}
+
+	logResponse(response)
+	return string(body)
+}
+
+func makeApiTtsRequest(r *http.Request) string {
+	request, _ := http.NewRequest("GET", "http://"+livingio_api_tts_server+r.URL.RequestURI(), nil)
 
 	val, exists := r.Header["Authorization"]
 	if exists {
