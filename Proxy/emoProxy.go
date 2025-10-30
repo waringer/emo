@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -24,21 +24,37 @@ type emo_code struct {
 	Errmessage string `json:"errmessage"`
 }
 
-const (
-	livingio_api_server     = "api.living.ai"    // my dns point to own server, local hosts on server point to lai server
-	livingio_api_tts_server = "eu-api.living.ai" // [server name must be used]
-	livingio_tts_server     = "eu-tts.living.ai" // [server name must be used]
-	livingio_res_eu_server  = "res.living.ai"    // [server name must be used]
-	postFS                  = "/tmp/"
-	logFileName             = "/var/log/emoProxy.log"
+type Configuration struct {
+	PidFile                 string `json:"pidFile"`
+	Livingio_API_Server     string `json:"livingio_api_server"`
+	Livingio_API_TTS_Server string `json:"livingio_api_tts_server"`
+	Livingio_TTS_Server     string `json:"livingio_tts_server"`
+	Livingio_RES_Server     string `json:"livingio_res_server"`
+	PostFS                  string `json:"postFS"`
+	LogFileName             string `json:"logFileName"`
+}
+
+var (
+	conf Configuration
 )
 
 func main() {
+	//load config
+	confFile := flag.String("c", "emoProxy.conf", "config file to use")
+	flag.Parse()
+
+	err := loadConfig(*confFile)
+	if err != nil {
+		log.Println("can't read conf file", *confFile, "- using default config")
+	}
+
+	writePid()
+
 	// disable ssl checks
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// redirect log
-	logFile, err := os.OpenFile(logFileName, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
+	logFile, err := os.OpenFile(conf.LogFileName, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -115,7 +131,7 @@ func main() {
 		fmt.Fprint(w, body)
 	})
 
-	// handle tts
+	// handle tts over api server
 	http.HandleFunc("/tts/", func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
 
@@ -139,6 +155,45 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(*Port), nil))
 }
 
+func loadConfig(filename string) error {
+	DefaultConf := Configuration{
+		PidFile:                 "/var/run/emoProxy.pid",
+		Livingio_API_Server:     "api.living.ai",
+		Livingio_API_TTS_Server: "eu-api.living.ai",
+		Livingio_TTS_Server:     "eu-tts.living.ai",
+		Livingio_RES_Server:     "res.living.ai",
+		PostFS:                  "/tmp/",
+		LogFileName:             "/var/log/emoProxy.log",
+	}
+
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		conf = DefaultConf
+		return err
+	}
+
+	err = json.Unmarshal(bytes, &DefaultConf)
+	if err != nil {
+		conf = Configuration{}
+		return err
+	}
+
+	conf = DefaultConf
+	return nil
+}
+
+func writePid() {
+	if conf.PidFile != "" {
+		f, err := os.OpenFile(conf.PidFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+		if err != nil {
+			log.Fatalf("Unable to create pid file : %v", err)
+		}
+		defer f.Close()
+
+		f.WriteString(fmt.Sprintf("%d", os.Getpid()))
+	}
+}
+
 func logRequest(r *http.Request) {
 	log.Println("request call: ", r)
 
@@ -155,27 +210,34 @@ func logResponse(r *http.Response) {
 	}
 }
 
+func logBody(contentType string, body []byte, prefix string) {
+	// write post request body to fs
+	dir := conf.PostFS + time.Now().Format("20060102/")
+	os.MkdirAll(dir, os.ModePerm)
+	switch contentType {
+	case "application/json":
+		os.WriteFile(dir+"emo_"+prefix+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
+	case "application/octet-stream":
+		os.WriteFile(dir+"emo_"+prefix+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
+	case "audio/mpeg":
+		os.WriteFile(dir+"emo_"+prefix+fmt.Sprint(time.Now().Unix())+".mp3", body, 0644)
+	default:
+		os.WriteFile(dir+"emo_"+prefix+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
+	}
+}
+
 func makeApiRequest(r *http.Request) string {
 	var request *http.Request
 	switch r.Method {
 	case "GET":
-		request, _ = http.NewRequest("GET", "https://"+livingio_api_server+r.URL.RequestURI(), nil)
+		request, _ = http.NewRequest("GET", "https://"+conf.Livingio_API_Server+r.URL.RequestURI(), nil)
 	case "POST":
-		body, _ := ioutil.ReadAll(r.Body)
+		body, _ := io.ReadAll(r.Body)
 
 		// write post request body to fs
-		dir := postFS + time.Now().Format("20060102/")
-		os.MkdirAll(dir, os.ModePerm)
-		switch r.Header.Get("Content-Type") {
-		case "application/json":
-			ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
-		case "application/octet-stream":
-			ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".pcm", body, 0644)
-		default:
-			ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
-		}
+		logBody(r.Header.Get("Content-Type"), body, "apiReq_")
 
-		request, _ = http.NewRequest("POST", "https://"+livingio_api_server+r.URL.RequestURI(), bytes.NewBuffer(body))
+		request, _ = http.NewRequest("POST", "https://"+conf.Livingio_API_Server+r.URL.RequestURI(), bytes.NewBuffer(body))
 
 		request.Header.Add("Content-Type", r.Header.Get("Content-Type"))
 		request.Header.Add("Content-Length", r.Header.Get("Content-Length"))
@@ -203,7 +265,7 @@ func makeApiRequest(r *http.Request) string {
 	defer response.Body.Close()
 
 	// read response
-	body, _ := ioutil.ReadAll(response.Body)
+	body, _ := io.ReadAll(response.Body)
 	log.Println("Server response: ", string(body))
 
 	logResponse(response)
@@ -211,7 +273,7 @@ func makeApiRequest(r *http.Request) string {
 }
 
 func makeTtsRequest(r *http.Request) string {
-	request, _ := http.NewRequest("GET", "http://"+livingio_tts_server+r.URL.RequestURI(), nil)
+	request, _ := http.NewRequest("GET", "http://"+conf.Livingio_TTS_Server+r.URL.RequestURI(), nil)
 
 	val, exists := r.Header["Authorization"]
 	if exists {
@@ -234,26 +296,16 @@ func makeTtsRequest(r *http.Request) string {
 	defer response.Body.Close()
 
 	// read response
-	body, _ := ioutil.ReadAll(response.Body)
+	body, _ := io.ReadAll(response.Body)
 
 	// write post request body to fs
-	dir := postFS + time.Now().Format("20060102/")
-	os.MkdirAll(dir, os.ModePerm)
-	switch response.Header.Get("Content-Type") {
-	case "application/json":
-		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
-	case "application/octet-stream":
-		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
-	default:
-		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
-	}
-
+	logBody(response.Header.Get("Content-Type"), body, "tts_")
 	logResponse(response)
 	return string(body)
 }
 
 func makeApiTtsRequest(r *http.Request) string {
-	request, _ := http.NewRequest("GET", "http://"+livingio_api_tts_server+r.URL.RequestURI(), nil)
+	request, _ := http.NewRequest("GET", "http://"+conf.Livingio_API_TTS_Server+r.URL.RequestURI(), nil)
 
 	val, exists := r.Header["Authorization"]
 	if exists {
@@ -276,26 +328,16 @@ func makeApiTtsRequest(r *http.Request) string {
 	defer response.Body.Close()
 
 	// read response
-	body, _ := ioutil.ReadAll(response.Body)
+	body, _ := io.ReadAll(response.Body)
 
 	// write post request body to fs
-	dir := postFS + time.Now().Format("20060102/")
-	os.MkdirAll(dir, os.ModePerm)
-	switch response.Header.Get("Content-Type") {
-	case "application/json":
-		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
-	case "application/octet-stream":
-		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
-	default:
-		ioutil.WriteFile(dir+"emo_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
-	}
-
+	logBody(response.Header.Get("Content-Type"), body, "apitts_")
 	logResponse(response)
 	return string(body)
 }
 
 func makeResRequest(r *http.Request, w http.ResponseWriter) string {
-	request, _ := http.NewRequest("GET", "https://"+livingio_res_eu_server+r.URL.RequestURI(), nil)
+	request, _ := http.NewRequest("GET", "https://"+conf.Livingio_RES_Server+r.URL.RequestURI(), nil)
 
 	val, exists := r.Header["Authorization"]
 	if exists {
@@ -318,21 +360,11 @@ func makeResRequest(r *http.Request, w http.ResponseWriter) string {
 	defer response.Body.Close()
 
 	// read response
-	body, _ := ioutil.ReadAll(response.Body)
+	body, _ := io.ReadAll(response.Body)
 
-	// write post request body to fs
-	dir := postFS + time.Now().Format("20060102/")
-	os.MkdirAll(dir, os.ModePerm)
-	switch response.Header.Get("Content-Type") {
-	case "application/json":
-		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".json", body, 0644)
-	case "application/octet-stream":
-		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".wav", body, 0644)
-	default:
-		ioutil.WriteFile(dir+"emo_res_"+fmt.Sprint(time.Now().Unix())+".bin", body, 0644)
-	}
+	logBody(response.Header.Get("Content-Type"), body, "res_")
 
-	for k, _ := range response.Header {
+	for k := range response.Header {
 		w.Header().Set(k, response.Header.Get(k))
 	}
 
