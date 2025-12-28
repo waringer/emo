@@ -1,6 +1,6 @@
-# Knowledge bank, tools, and reverse engineer for EMO by living.ai
+# Knowledge bank, tools, and reverse engineering for EMO by living.ai
 This repository is to collect and document tools and knowledge of [EMO the desktop robot pet by living.ai](https://living.ai/emo/).
-The short term goal for the project is to collect data and information on how the EMO robot works. In the future the hope is to have a toolset to make it possible for emo to be offline and standalone, in the name of privacy, flexibility to customize, and to be independent.
+The short term goal for the project is to collect data and information on how the EMO robot works. In the future the hope is to have a toolset to make it possible for EMO to be offline and standalone, in the name of privacy, flexibility to customize, and to be independent.
 
 ## Our tools
 To support our efforts we develop tools. Here are some of them:
