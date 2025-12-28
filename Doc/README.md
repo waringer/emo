@@ -5,7 +5,6 @@ We keep documentation on our findings.
 
 ## Sections
 - [Hardware](/Doc/Hardware) - Any hardware information we find.
-- [Firmwares](/Doc/Firmwares) - We document changes to the firmware.
 - [Behaviors](/Doc/Behaviors) - Actions that EMO can do.
 - [Bluetooth](/Doc/Bluetooth) - Bluetooth specific information.
 - [Intents](/Doc/Intents) - Intent responses that we have documented being sent to EMO.
