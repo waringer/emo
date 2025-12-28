@@ -5,7 +5,7 @@ The short term goal for the project is to collect data and information on how th
 ## Our tools
 To support our efforts we develop tools. Here are some of them:
 - [EmoProxy](/Proxy) - A proxy server to monitor and investigate the api calls between EMO and the living.ai servers.
-- [tts](/tts) - A work in progress text-to-speach server for EMO to allow for a more local setup.
+- [tts](/tts) - A work in progress text-to-speech server for EMO to allow for a more local setup.
 - [Docker setup for EMO Proxy by SebbeJohansson](https://github.com/SebbeJohansson/emo-proxy-docker) - A simplified setup for using the EMO Proxy. 
 - [Firmwares](/Firmwares) - We document changes to the firmware.
 
